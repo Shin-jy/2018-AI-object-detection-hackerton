@@ -1,0 +1,29 @@
+#make workspace ready
+export WK_DIR=$HOME/object_detection
+mkdir $WK_DIR
+cd $WK_DIR
+
+#use one of the below commands depending on place where openVINO installed
+option1: export VINO_PATH=/opt/intel/computer_vision_sdk
+option2: export VINO_PATH=$HOME/intel/computer_vision_sdk
+
+#install all TF pre-requisites
+cd $VINO_PATH/deployment_tools/model_optimizer/install_prerequisites/
+sudo ./install_prerequisites_tf.sh
+cd $WK_DIR
+#download trained models
+wget http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet50_coco_2018_01_28.tar.gz
+tar -zxvf faster_rcnn_resnet50_coco_2018_01_28.tar.gz
+cd faster_rcnn_resnet50_coco_2018_01_28
+#generate the openVINO Models .xml and .bin 
+python3 $VINO_PATH/deployment_tools/model_optimizer/mo.py --framework tf --input_model frozen_inference_graph.pb     --output_dir  ./ --output=detection_boxes,detection_scores,num_detections --tensorflow_use_custom_operations_config $VINO_PATH/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json --tensorflow_object_detection_api_pipeline_config pipeline.config
+#Build inference engine samples
+mkdir -p $WK_DIR/samples
+cd $WK_DIR/samples
+cmake -DCMAKE_BUILD_TYPE=Release  $VINO_PATH/inference_engine/samples
+make
+#download and store the .labels file
+cd $WK_DIR/faster_rcnn_resnet50_coco_2018_01_28
+wget https://raw.githubusercontent.com/vdevaram/deep_learning_utilities_cpu/master/dldt/frozen_inference_graph.labels
+#Run the inference on the model
+$WK_DIR/samples/intel64/Release/object_detection_demo_ssd_async  -i "cam" -m $WK_DIR/faster_rcnn_resnet50_coco_2018_01_28/frozen_inference_graph.xml -d CPU

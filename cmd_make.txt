@@ -1,0 +1,1 @@
+g++ -o sample1 -std=c++11 main.cpp -I$INTEL_CVSDK_DIR/opencv/include -I$INTEL_CVSDK_DIR/deployment_tools/inference_engine/include -L$IE_PLUGINS_PATH -L$INTEL_CVSDK_DIR/opencv/lib -ldl -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -linference_engine -lopencv_video -lopencv_highgui -lopencv_videoio

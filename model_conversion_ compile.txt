@@ -1,0 +1,72 @@
+//model conversion and compile //
+//LeNet MNIST
+cd /opt/intel/computer_vision_sdk/deployment_tools/model_optimizer/
+
+python3 mo.py --input_model ~/my_model/test.caffemodel --output_dir ~/my_model
+
+cd ~/sample
+
+g++ -o sample1 -std=c++11 main_test.cpp -I$INTEL_CVSDK_DIR/opencv/include -I$INTEL_CVSDK_DIR/deployment_tools/inference_engine/include -L$IE_PLUGINS_PATH -L$INTEL_CVSDK_DIR/opencv/lib -ldl -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -linference_engine -lopencv_video -lopencv_highgui -lopencv_videoio
+
+./sample1
+
+---------------------------------------
+//ssd300
+cd /opt/intel/computer_vision_sdk/deployment_tools/model_optimizer/
+
+python3 mo.py --input_model ~/my_model/ssd300.caffemodel --output_dir ~/my_model --data_type FP16
+
+cd ~/sample
+
+g++ -o sample1 -std=c++11 main_ssd.cpp -I$INTEL_CVSDK_DIR/opencv/include -I$INTEL_CVSDK_DIR/deployment_tools/inference_engine/include -L$IE_PLUGINS_PATH -L$INTEL_CVSDK_DIR/opencv/lib -ldl -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -linference_engine -lopencv_video -lopencv_highgui -lopencv_videoio
+
+./sample1
+
+---------------------------------------
+
+//mobilenet-ssd
+cd /opt/intel/computer_vision_sdk/deployment_tools/model_optimizer/
+
+python3 mo.py --input_model ~/my_model/mobilenet-ssd.caffemodel --output_dir ~/my_model --FP16
+
+cd ~/sample
+
+g++ -o sample1 -std=c++11 main_mobilenet.cpp -I$INTEL_CVSDK_DIR/opencv/include -I$INTEL_CVSDK_DIR/deployment_tools/inference_engine/include -L$IE_PLUGINS_PATH -L$INTEL_CVSDK_DIR/opencv/lib -ldl -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -linference_engine -lopencv_video -lopencv_highgui -lopencv_videoio
+
+./sample1
+
+===============================
+
+//cifa10
+
+cd ~/sample_code/opt-intel-computer_vision_sdk-deployment_tools-model_optimizer-mo-front-caffe-proto/
+
+sudo cp ./caffe_pb2.py /opt/intel/computer_vision_sdk/deployment_tools/model_optimizer/mo/front/caffe/proto/
+
+cd /opt/intel/computer_vision_sdk/deployment_tools/model_optimizer/
+
+python3 mo.py --input_model ~/my_model/cifar.caffemodel --output_dir ~/my_model --FP32
+
+cd ~/sample
+
+g++ -o sample1 -std=c++11 main_cifar.cpp -I$INTEL_CVSDK_DIR/opencv/include -I$INTEL_CVSDK_DIR/deployment_tools/inference_engine/include -L$IE_PLUGINS_PATH -L$INTEL_CVSDK_DIR/opencv/lib -ldl -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -linference_engine -lopencv_video -lopencv_highgui -lopencv_videoio
+
+./sample1
+
+//cifar10 Video input
+
+g++ -o sample1 -std=c++11 main_cifar_camera.cpp -I$INTEL_CVSDK_DIR/opencv/include -I$INTEL_CVSDK_DIR/deployment_tools/inference_engine/include -L$IE_PLUGINS_PATH -L$INTEL_CVSDK_DIR/opencv/lib -ldl -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -linference_engine -lopencv_video -lopencv_highgui -lopencv_videoio
+
+./sample1
+
+
+cd ~/sample_code/R2_caffe_pb2
+
+sudo cp ./caffe_pb2.py /opt/intel/computer_vision_sdk/deployment_tools/model_optimizer/mo/front/caffe/proto/
+
+cd /opt/intel/computer_vision_sdk/deployment_tools/model_optimizer/
+
+python3 mo.py --input_model ~/my_model/ssd300.caffemodel --output_dir ~/my_model
+
+cd ~/sample
+

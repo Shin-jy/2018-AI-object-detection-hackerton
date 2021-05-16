@@ -1,0 +1,34 @@
+cd work/caffe
+
+./data/cifar10/get_cifar10.sh
+
+cd ~/work/caffe/cifar2png
+
+g++ cifar2png.cpp -std=gnu++11 -o cifar2png -I /opt/intel/computer_vision_sdk/opencv/include -L /opt/intel/computer_vision_sdk/opencv/lib -lopencv_core -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui
+
+./cifar2png
+
+g++ caphand.cpp -o caphand -I /opt/intel/computer_vision_sdk/opencv/include -L /opt/intel/computer_vision_sdk/opencv/lib -lopencv_core -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui
+
+./caphand
+
+export LD_LIBRARY_PATH=/home/intel/work/caffe/build/lib/:$LD_LIBRARY_PATH
+
+
+g++ createdb.cpp -std=gnu++11 -o createdb -I /home/intel/work/caffe/build/include -I /home/intel/work/caffe/include -L /home/intel/work/caffe/build/lib -L /usr/lib/x86_64-linux-gpu -lopencv_core -lopencv_imgproc -lopencv_highgui -lcaffe -lboost_system -lprotobuf
+
+./createdb
+
+//image_mean 파일 생성 
+cd ~/work/caffe
+./build/tools/compute_image_mean -backend=lmdb examples/study/study_train_lmdb examples/study/mean.binaryproto
+
+
+
+//modem training
+cd ~/work/caffe
+./examples/study/train_full.sh
+
+
+
+
